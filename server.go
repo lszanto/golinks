@@ -1,37 +1,18 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
     "encoding/json"
     "os"
 
     "github.com/gin-gonic/gin"
-    "github.com/dgrijalva/jwt-go"
 
     "github.com/jinzhu/gorm"
     _ "github.com/jinzhu/gorm/dialects/sqlite"
 
     "github.com/lszanto/links/config"
     "github.com/lszanto/links/controllers"
+    "github.com/lszanto/links/middleware"
 )
-
-func JWTAuth(key string) gin.HandlerFunc {
-    return func(c *gin.Context) {
-        // parse jwt
-        token, err := jwt.ParseFromRequest(c.Request, func(token *jwt.Token) (interface{}, error) {
-            return []byte(key), nil
-        })
-
-        if err == nil && token.Valid {
-            // move on
-            c.Next()
-        } else {
-            // abort
-            c.AbortWithStatus(http.StatusUnauthorized)
-        }
-    }
-}
 
 func main() {
     // set error holder
@@ -71,11 +52,8 @@ func main() {
 
     // add routes
     router.POST("/login", uc.Login)
-    router.POST("/link", JWTAuth(config.SESS_Secret), lc.Post)
+    router.POST("/link", middleware.JWTVerify(config.SESS_Secret), lc.Post)
     router.GET("/link/:id", lc.Get)
-
-    // lets go
-    fmt.Println("Lets do this")
 
     // SET STATIC DIR, START SERVER
 
