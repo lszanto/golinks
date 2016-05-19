@@ -12,13 +12,12 @@ import (
 
 // LinkController structure setup
 type LinkController struct {
-    db     *gorm.DB
-    config config.Config
+    BaseController
 }
 
 // NewLinkController returns a new instance of this controller
 func NewLinkController(db *gorm.DB, config config.Config) *LinkController {
-    return &LinkController{db: db, config: config}
+    return &LinkController{ BaseController{ db: db, config: config }}
 }
 
 // Create func to create a new link

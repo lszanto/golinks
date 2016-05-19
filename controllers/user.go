@@ -14,13 +14,12 @@ import (
 
 // UserController structure setup
 type UserController struct {
-    db     *gorm.DB
-    config config.Config
+    BaseController
 }
 
 // NewUserController returns an instance of controller
 func NewUserController(db *gorm.DB, config config.Config) *UserController {
-    return &UserController{db: db, config: config}
+    return &UserController{ BaseController { db: db, config: config }}
 }
 
 // Login checks password and signs in/returns jwt token
