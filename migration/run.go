@@ -1,45 +1,45 @@
 package main
 
 import (
-    "encoding/json"
-    "os"
+	"encoding/json"
+	"os"
 
-    "github.com/jinzhu/gorm"
-    _ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
-    "github.com/lszanto/links/config"
-    "github.com/lszanto/links/models"
+	"github.com/lszanto/links/config"
+	"github.com/lszanto/links/models"
 )
 
 func main() {
-    // set error holder
-    var err error
+	// set error holder
+	var err error
 
-    // CONFIG
+	// CONFIG
 
-    // create config object
-    config := config.Config{}
+	// create config object
+	config := config.Config{}
 
-    // open a config file
-    configFile, _ := os.Open("app/config.json")
+	// open a config file
+	configFile, _ := os.Open("app/config.json")
 
-    // decode into config
-    err = json.NewDecoder(configFile).Decode(&config)
+	// decode into config
+	err = json.NewDecoder(configFile).Decode(&config)
 
-    if err != nil {
-        panic("failed to open config")
-    }
+	if err != nil {
+		panic("failed to open config")
+	}
 
-    // GORM DATABASE
+	// GORM DATABASE
 
-    // create db connection
-    db, err := gorm.Open(config.DatabaseEngine, config.DatabaseString)
+	// create db connection
+	db, err := gorm.Open(config.DatabaseEngine, config.DatabaseString)
 
-    if err != nil {
-        panic("failed to connect to database")
-    }
+	if err != nil {
+		panic("failed to connect to database")
+	}
 
-    // migrate schema
-    db.AutoMigrate(models.User{})
-    db.AutoMigrate(models.Link{})
+	// migrate schema
+	db.AutoMigrate(models.User{})
+	db.AutoMigrate(models.Link{})
 }

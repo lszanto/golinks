@@ -1,26 +1,26 @@
 package middleware
 
 import (
-    "net/http"
+	"net/http"
 
-    "github.com/dgrijalva/jwt-go"
-    "github.com/gin-gonic/gin"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 )
 
 // JWTVerify middleware verifys a key and moves on if correct
 func JWTVerify(key string) gin.HandlerFunc {
-    return func(c *gin.Context) {
-        // parse jwt
-        token, err := jwt.ParseFromRequest(c.Request, func(token *jwt.Token) (interface{}, error) {
-            return []byte(key), nil
-        })
+	return func(c *gin.Context) {
+		// parse jwt
+		token, err := jwt.ParseFromRequest(c.Request, func(token *jwt.Token) (interface{}, error) {
+			return []byte(key), nil
+		})
 
-        if err == nil && token.Valid {
-            // move on
-            c.Next()
-        } else {
-            // abort
-            c.AbortWithStatus(http.StatusUnauthorized)
-        }
-    }
+		if err == nil && token.Valid {
+			// move on
+			c.Next()
+		} else {
+			// abort
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+	}
 }
