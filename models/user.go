@@ -14,4 +14,5 @@ type User struct {
     CreatedAt *time.Time `json:",omitempty"`
     UpdatedAt *time.Time `json:",omitempty"`
     DeletedAt *time.Time `json:",omitempty"`
+    Links []Link `json:",omitempty"`
 }
