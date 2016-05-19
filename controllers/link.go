@@ -94,7 +94,7 @@ func (lc LinkController) GetAll(c *gin.Context) {
     var links[] models.Link
 
     // grab all links
-    lc.db.Find(&links)
+    lc.db.Preload("User").Find(&links)
 
     // return all links
     c.JSON(http.StatusOK, gin.H{
