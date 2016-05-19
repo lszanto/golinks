@@ -20,17 +20,14 @@ func main() {
 
 	// CONFIG
 
-	// open a config file
-	configFile, _ := os.Open("app/config.json")
-
-	// decode config
-	decoder := json.NewDecoder(configFile)
-
 	// create config object
 	config := config.Config{}
 
+	// open a config file
+	configFile, _ := os.Open("app/config.json")
+
 	// decode
-	err = decoder.Decode(&config)
+	err = json.NewDecoder(configFile).Decode(&config)
 
 	// GORM DATABASE
 
