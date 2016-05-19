@@ -53,7 +53,8 @@ func main() {
     router := gin.Default()
 
     // login routes
-    router.POST("/login", uc.Login)
+    router.POST("/user/login", uc.Login)
+    router.POST("/user", uc.CreateUser)
 
     // link routes
     router.GET("/links", lc.GetAll)
