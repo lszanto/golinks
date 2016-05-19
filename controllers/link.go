@@ -44,8 +44,8 @@ func (lc LinkController) Get(c *gin.Context) {
     // set link placeholder
     var link models.Link
 
-    // find link
-    lc.db.First(&link, id)
+    // find link with user
+    lc.db.Preload("User").First(&link, id)
 
     if link.Title == "" {
         c.JSON(http.StatusNotFound, gin.H{
