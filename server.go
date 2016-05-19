@@ -1,62 +1,68 @@
 package main
 
 import (
-	"encoding/json"
-	"os"
+    "encoding/json"
+    "os"
 
-	"github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+    "github.com/jinzhu/gorm"
+    _ "github.com/jinzhu/gorm/dialects/sqlite"
 
-	"github.com/lszanto/links/config"
-	"github.com/lszanto/links/controllers"
-	"github.com/lszanto/links/middleware"
+    "github.com/lszanto/links/config"
+    "github.com/lszanto/links/controllers"
+    "github.com/lszanto/links/middleware"
 )
 
 func main() {
-	// set error holder
-	var err error
+    // set error holder
+    var err error
 
-	// CONFIG
+    // CONFIG
 
-	// create config object
-	config := config.Config{}
+    // create config object
+    config := config.Config{}
 
-	// open a config file
-	configFile, _ := os.Open("app/config.json")
+    // open a config file
+    configFile, _ := os.Open("app/config.json")
 
-	// decode
-	err = json.NewDecoder(configFile).Decode(&config)
+    // decode into config
+    err = json.NewDecoder(configFile).Decode(&config)
 
-	// GORM DATABASE
+    if err != nil {
+        panic("failed to open config")
+    }
 
-	// create db connection
-	db, err := gorm.Open(config.DatabaseEngine, config.DatabaseString)
+    // GORM DATABASE
 
-	if err != nil {
-		panic("failed to connect to database")
-	}
+    // create db connection
+    db, err := gorm.Open(config.DatabaseEngine, config.DatabaseString)
 
-	// controllers
-	lc := controllers.NewLinkController(db, config)
-	uc := controllers.NewUserController(db, config)
+    if err != nil {
+        panic("failed to connect to database")
+    }
 
-	// ROUTER
+    // controllers
+    lc := controllers.NewLinkController(db, config)
+    uc := controllers.NewUserController(db, config)
 
-	// setup router
-	router := gin.Default()
+    // ROUTER
 
-	// add routes
-	router.POST("/login", uc.Login)
-	router.POST("/link", middleware.JWTVerify(config.SecretKey), lc.Post)
-	router.GET("/link/:id", lc.Get)
+    // setup router
+    router := gin.Default()
 
-	// SET STATIC DIR, START SERVER
+    // login routes
+    router.POST("/login", uc.Login)
 
-	// setup static folder
-	router.Static("/assets", "./assets")
+    // link routes
+    router.POST("/link", middleware.JWTVerify(config.SecretKey), lc.Post)
+    router.GET("/link/:id", lc.Get)
 
-	// run server
-	router.Run()
+    // SET STATIC DIR, START SERVER
+
+    // setup static folder
+    router.Static("/assets", "./assets")
+
+    // run server
+    router.Run()
 }
