@@ -46,7 +46,10 @@ func (lc LinkController) Get(c *gin.Context) {
     lc.db.First(&link, id)
 
     if link.Title == "" {
-        c.Status(http.StatusNotFound)
+        c.JSON(http.StatusNotFound, gin.H{
+            "status": http.StatusNotFound,
+            "message": "Link not found",
+        })
         return
     }
 
