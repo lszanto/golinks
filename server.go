@@ -5,7 +5,6 @@ import (
     "os"
 
     "github.com/gin-gonic/gin"
-
     "github.com/jinzhu/gorm"
     _ "github.com/jinzhu/gorm/dialects/sqlite"
 
@@ -41,9 +40,6 @@ func main() {
     if err != nil {
         panic("failed to connect to database")
     }
-
-    // migrate schema
-    
 
     // SETUP CONTROLLERS
 
