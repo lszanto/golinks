@@ -42,6 +42,11 @@ func main() {
         panic("failed to connect to database")
     }
 
+    // migrate schema
+    
+
+    // SETUP CONTROLLERS
+
     // controllers
     lc := controllers.NewLinkController(db, config)
     uc := controllers.NewUserController(db, config)

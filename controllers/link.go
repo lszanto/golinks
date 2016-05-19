@@ -80,11 +80,7 @@ func (lc LinkController) Update(c *gin.Context) {
     }
 
     // update fields
-    link.Title = c.PostForm("title")
-    link.URL = c.PostForm("url")
-
-    // save
-    lc.db.Save(&link)
+    lc.db.Model(&link).Updates(models.Link{ Title: c.PostForm("title"), URL: c.PostForm("url") })
 
     // send accepted response
     c.JSON(http.StatusOK, gin.H{
