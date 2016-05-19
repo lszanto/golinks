@@ -57,6 +57,20 @@ func (lc LinkController) Get(c *gin.Context) {
     })
 }
 
+// GetAll links
+func (lc LinkController) GetAll(c *gin.Context) {
+    // set links placeholder
+    var links[] models.Link
+
+    // grab all links
+    lc.db.Find(&links)
+
+    // return all links
+    c.JSON(http.StatusOK, gin.H{
+        "links": links,
+    })
+}
+
 // Delete a link
 func (lc LinkController) Delete(c *gin.Context) {
     // grab id

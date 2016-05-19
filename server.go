@@ -55,9 +55,10 @@ func main() {
     router.POST("/login", uc.Login)
 
     // link routes
-    router.GET("/link/:id", lc.Get)
-    router.DELETE("/link/:id", middleware.JWTVerify(config.SecretKey), lc.Delete)
-    router.POST("/link", middleware.JWTVerify(config.SecretKey), lc.Post)
+    router.GET("/links", lc.GetAll)
+    router.GET("/links/:id", lc.Get)
+    router.DELETE("/links/:id", middleware.JWTVerify(config.SecretKey), lc.Delete)
+    router.POST("/links", middleware.JWTVerify(config.SecretKey), lc.Post)
 
     // SET STATIC DIR, START SERVER
 
