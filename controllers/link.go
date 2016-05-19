@@ -56,3 +56,26 @@ func (lc LinkController) Get(c *gin.Context) {
         "url":   link.URL,
     })
 }
+
+// Delete a link
+func (lc LinkController) Delete(c *gin.Context) {
+    // grab id
+    id := c.Params.ByName("id")
+
+    // set link placeholder
+    var link models.Link
+
+    // find link
+    lc.db.First(&link, id)
+
+    if link.Title == "" {
+        c.Status(http.StatusNotFound)
+        return
+    }
+
+    // delete link
+    lc.db.Delete(&link)
+
+    // return status code
+    c.Status(http.StatusOK)
+}
