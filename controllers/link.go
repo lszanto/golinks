@@ -51,10 +51,7 @@ func (lc LinkController) Get(c *gin.Context) {
     }
 
     // return
-    c.JSON(http.StatusOK, gin.H{
-        "title": link.Title,
-        "url":   link.URL,
-    })
+    c.JSON(http.StatusOK, link)
 }
 
 // GetAll links
