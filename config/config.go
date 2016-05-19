@@ -1,7 +1,8 @@
 package config
 
+// Config structure so we can access all attributes
 type Config struct {
-    DB_String string `json:"db_connection_string"`
-    DB_Engine string `json:"db_engine"`
-    SESS_Secret string `json:"secret_key"`
+	DbString  string `json:"db_connection_string"`
+	DbEngine  string `json:"db_engine"`
+	SecretKey string `json:"secret_key"`
 }
