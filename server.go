@@ -35,7 +35,7 @@ func main() {
 	// GORM DATABASE
 
 	// create db connection
-	db, err := gorm.Open(config.DbEngine, config.DbString)
+	db, err := gorm.Open(config.DatabaseEngine, config.DatabaseString)
 
 	if err != nil {
 		panic("failed to connect to database")
