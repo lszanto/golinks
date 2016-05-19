@@ -11,6 +11,6 @@ type Link struct {
     URL   string
     Title string
     DeletedAt *time.Time `json:",omitempty"`
-    User User
-    UserID int
+    User User `json:",omitempty"`
+    UserID int `json:"-"`
 }

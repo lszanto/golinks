@@ -55,6 +55,7 @@ func main() {
     // login routes
     router.POST("/user/login", uc.Login)
     router.POST("/user", uc.CreateUser)
+    router.GET("/user/:id", uc.Get)
 
     // link routes
     router.GET("/links", lc.GetAll)

@@ -68,6 +68,29 @@ func (uc UserController) CreateUser(c *gin.Context) {
     })
 }
 
+// Get grabs user details via id
+func (uc UserController) Get(c *gin.Context) {
+    // grab id
+    id := c.Params.ByName("id")
+
+    // set user placeholder
+    var user models.User
+
+    // find user details
+    uc.db.Preload("Links").First(&user, id)
+
+    if user.Username == "" {
+        c.JSON(http.StatusNotFound, gin.H{
+            "status": http.StatusNotFound,
+            "message": "User not found",
+        })
+        return
+    }
+
+    // return
+    c.JSON(http.StatusOK, user)
+}
+
 // login, attempts to login a user
 func (uc UserController) login(username string, password string) bool {
     // create user holder
