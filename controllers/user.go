@@ -3,13 +3,14 @@ package controllers
 import (
     "net/http"
     "time"
+    "golang.org/x/crypto/bcrypt"
 
     "github.com/dgrijalva/jwt-go"
     "github.com/gin-gonic/gin"
     "github.com/jinzhu/gorm"
 
     "github.com/lszanto/links/config"
-    //"github.com/lszanto/links/models"
+    "github.com/lszanto/links/models"
 )
 
 // UserController structure setup
@@ -24,8 +25,8 @@ func NewUserController(db *gorm.DB, config config.Config) *UserController {
 
 // Login checks password and signs in/returns jwt token
 func (uc UserController) Login(c *gin.Context) {
-    // check password
-    if c.PostForm("password") == "p123" {
+    // attempt login
+    if uc.login(c.PostForm("username"), c.PostForm("password")) {
         // create token
         token := jwt.New(jwt.SigningMethodHS256)
 
@@ -43,8 +44,63 @@ func (uc UserController) Login(c *gin.Context) {
 
         c.JSON(http.StatusOK, gin.H{
             "token": tokenString,
+            "password": uc.hash("p123"),
         })
     } else {
         c.Status(http.StatusUnauthorized)
     }
+}
+
+// CreateUser creates a new user account
+func (uc UserController) CreateUser(c *gin.Context) {
+    // grab sent attributes
+    username := c.PostForm("username")
+    password := uc.hash(c.PostForm("password"))
+    email := c.PostForm("email")
+
+    // insert user
+    uc.db.Create(&models.User{ Username: username, Password: password, Email: email })
+
+    // return success
+    c.JSON(http.StatusCreated, gin.H{
+        "status": http.StatusCreated,
+        "message": "User created",
+    })
+}
+
+// login, attempts to login a user
+func (uc UserController) login(username string, password string) bool {
+    // create user holder
+    var user models.User
+
+    // attempt to find user
+    uc.db.Where("username = ?", username).First(&user)
+
+    if user.Username == "" {
+        return false
+    }
+
+    // check if password matches
+    err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+    // check if we passed(nil = match)
+    if err == nil {
+        return true
+    }
+
+    // if we get to here we've failed
+    return false
+}
+
+// hash, returns a hashed password
+func (uc UserController) hash(hashString string) string {
+    // hash password
+    hash, err := bcrypt.GenerateFromPassword([]byte(hashString), bcrypt.DefaultCost)
+
+    if err != nil {
+        panic(err)
+    }
+
+    // return hashed password
+    return string(hash)
 }
