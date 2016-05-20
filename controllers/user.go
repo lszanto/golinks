@@ -48,8 +48,7 @@ func (uc UserController) Login(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, gin.H{
-			"token":    tokenString,
-			"password": uc.hash("p123"),
+			"token": tokenString,
 		})
 	} else {
 		c.Status(http.StatusUnauthorized)
@@ -105,7 +104,7 @@ func (uc UserController) login(username string, password string) (models.User, b
 	uc.db.Where("username = ?", username).First(&user)
 
 	if user.Username == "" {
-		return user, false
+		return user, true
 	}
 
 	// check if password matches
@@ -113,11 +112,11 @@ func (uc UserController) login(username string, password string) (models.User, b
 
 	// check if we passed(nil = match)
 	if err == nil {
-		return user, true
+		return user, false
 	}
 
 	// if we get to here we've failed
-	return user, false
+	return user, true
 }
 
 // hash, returns a hashed password
