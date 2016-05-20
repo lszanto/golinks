@@ -41,7 +41,9 @@ func (lc LinkController) Create(c *gin.Context) {
 	// get user id with dirty casting
 	uid := int(claims["uid"].(float64))
 
-	lc.db.Create(&models.Link{Title: title, URL: url, UserID: uid})
+	if err := lc.db.Create(&models.Link{Title: title, URL: url, UserID: uid}).Error; err != nil {
+		panic(err)
+	}
 
 	// created
 	c.JSON(http.StatusCreated, gin.H{
@@ -59,7 +61,9 @@ func (lc LinkController) Get(c *gin.Context) {
 	var link models.Link
 
 	// find link with user
-	lc.db.Preload("User").First(&link, id)
+	if err := lc.db.Preload("User").First(&link, id).Error; err != nil {
+		panic(err)
+	}
 
 	if link.Title == "" {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -82,7 +86,9 @@ func (lc LinkController) Update(c *gin.Context) {
 	var link models.Link
 
 	// find link
-	lc.db.First(&link, id)
+	if err := lc.db.First(&link, id); err != nil {
+		panic(err)
+	}
 
 	if link.Title == "" {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -93,7 +99,9 @@ func (lc LinkController) Update(c *gin.Context) {
 	}
 
 	// update fields
-	lc.db.Model(&link).Updates(models.Link{Title: c.PostForm("title"), URL: c.PostForm("url")})
+	if err := lc.db.Model(&link).Updates(models.Link{Title: c.PostForm("title"), URL: c.PostForm("url")}).Error; err != nil {
+		panic(err)
+	}
 
 	// send accepted response
 	c.JSON(http.StatusOK, gin.H{
@@ -108,7 +116,9 @@ func (lc LinkController) GetAll(c *gin.Context) {
 	var links []models.Link
 
 	// grab all links
-	lc.db.Preload("User").Find(&links)
+	if err := lc.db.Preload("User").Find(&links).Error; err != nil {
+		panic(err)
+	}
 
 	// return all links
 	c.JSON(http.StatusOK, gin.H{
@@ -125,7 +135,9 @@ func (lc LinkController) Delete(c *gin.Context) {
 	var link models.Link
 
 	// find link
-	lc.db.First(&link, id)
+	if err := lc.db.First(&link, id).Error; err != nil {
+		panic(err)
+	}
 
 	if link.Title == "" {
 		c.Status(http.StatusNotFound)
