@@ -27,12 +27,16 @@ func NewUserController(db *gorm.DB, config config.Config) *UserController {
 // Login checks password and signs in/returns jwt token
 func (uc UserController) Login(c *gin.Context) {
 	// attempt login
-	if uc.login(c.PostForm("username"), c.PostForm("password")) {
+	user, err := uc.login(c.PostForm("username"), c.PostForm("password"))
+
+	// attempt login
+	if err != true {
 		// create token
 		token := jwt.New(jwt.SigningMethodHS256)
 
 		// set claims
-		token.Claims["foo"] = "bar"
+		token.Claims["uid"] = user.ID
+		token.Claims["username"] = user.Username
 		token.Claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 		// create token string
@@ -93,7 +97,7 @@ func (uc UserController) Get(c *gin.Context) {
 }
 
 // login, attempts to login a user
-func (uc UserController) login(username string, password string) bool {
+func (uc UserController) login(username string, password string) (models.User, bool) {
 	// create user holder
 	var user models.User
 
@@ -101,7 +105,7 @@ func (uc UserController) login(username string, password string) bool {
 	uc.db.Where("username = ?", username).First(&user)
 
 	if user.Username == "" {
-		return false
+		return user, false
 	}
 
 	// check if password matches
@@ -109,11 +113,11 @@ func (uc UserController) login(username string, password string) bool {
 
 	// check if we passed(nil = match)
 	if err == nil {
-		return true
+		return user, true
 	}
 
 	// if we get to here we've failed
-	return false
+	return user, false
 }
 
 // hash, returns a hashed password
