@@ -26,6 +26,15 @@ func (lc LinkController) Create(c *gin.Context) {
 	title := c.PostForm("title")
 	url := c.PostForm("url")
 
+	// ensure we don't have blank fields, if we do return error
+	if title == "" || url == "" {
+		c.JSON(http.StatusNotAcceptable, gin.H{
+			"status":  http.StatusNotAcceptable,
+			"message": "Please ensure no fields are blank",
+		})
+		return
+	}
+
 	// create new
 	lc.db.Create(&models.Link{Title: title, URL: url})
 
