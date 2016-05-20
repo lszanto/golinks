@@ -16,6 +16,9 @@ func JWTVerify(key string) gin.HandlerFunc {
 		})
 
 		if err == nil && token.Valid {
+			// set claims to access
+			c.Set("claims", token.Claims)
+
 			// move on
 			c.Next()
 		} else {

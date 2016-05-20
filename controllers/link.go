@@ -35,8 +35,13 @@ func (lc LinkController) Create(c *gin.Context) {
 		return
 	}
 
-	// create new
-	lc.db.Create(&models.Link{Title: title, URL: url})
+	// grab claims
+	claims := c.MustGet("claims").(map[string]interface{})
+
+	// get user id with dirty casting
+	uid := int(claims["uid"].(float64))
+
+	lc.db.Create(&models.Link{Title: title, URL: url, UserID: uid})
 
 	// created
 	c.JSON(http.StatusCreated, gin.H{
