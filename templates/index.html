@@ -1,0 +1,7 @@
+<h1>{{ .test }}</h1>
+
+<ul>
+    {{ range .links }}
+        <li>{{ .ID }} {{ .Title }}: <a href="{{ .URL }}" >{{ .URL }}</a></li>
+    {{ end }}
+</ul>

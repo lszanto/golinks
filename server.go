@@ -11,6 +11,7 @@ import (
 	"github.com/lszanto/links/config"
 	"github.com/lszanto/links/controllers"
 	"github.com/lszanto/links/middleware"
+	"github.com/lszanto/links/models"
 )
 
 func main() {
@@ -51,6 +52,21 @@ func main() {
 
 	// setup router
 	router := gin.Default()
+
+	// load templates
+	router.LoadHTMLGlob("templates/*")
+
+	// base routes
+	router.GET("/", func(c *gin.Context) {
+		var links []models.Link
+
+		db.Find(&links)
+
+		c.HTML(200, "index.html", gin.H{
+			"test":  "hey",
+			"links": links,
+		})
+	})
 
 	// api routes
 	api := router.Group("/api")
