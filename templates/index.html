@@ -1,7 +1,24 @@
-<h1>{{ .test }}</h1>
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8" >
+    <title>.links</title>
+</head>
 
-<ul>
-    {{ range .links }}
-        <li>{{ .ID }} {{ .Title }}: <a href="{{ .URL }}" >{{ .URL }}</a></li>
-    {{ end }}
-</ul>
+<body>
+
+    <div id="links-app" >
+        <ul>
+            <li v-for="link in links" >
+                {{ "{{ link.Title }}" }}
+
+                <strong @click="deleteLink(link)" >X</strong>
+            </li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="assets/js/vue.js" ></script>
+    <script type="text/javascript" src="assets/js/vue-resource.min.js" ></script>
+    <script type="text/javascript" src="assets/js/main.js" ></script>
+</body>
+</html>
