@@ -52,17 +52,26 @@ func main() {
 	// setup router
 	router := gin.Default()
 
-	// login routes
-	router.POST("/user/login", uc.Login)
-	router.POST("/user", uc.CreateUser)
-	router.GET("/user/:id", uc.Get)
+	// api routes
+	api := router.Group("/api")
+	{
+		// login routes anybody
+		api.POST("/user/login", uc.Login)
+		api.POST("/user", uc.CreateUser)
+		api.GET("/user/:id", uc.Get)
 
-	// link routes
-	router.GET("/links", lc.GetAll)
-	router.GET("/links/:id", lc.Get)
-	router.PUT("/links/:id", middleware.JWTVerify(config.SecretKey), lc.Update)
-	router.DELETE("/links/:id", middleware.JWTVerify(config.SecretKey), lc.Delete)
-	router.POST("/links", middleware.JWTVerify(config.SecretKey), lc.Create)
+		// link routes anybody
+		api.GET("/links", lc.GetAll)
+		api.GET("/links/:id", lc.Get)
+
+		// set auth routes
+		auth := api.Group("/", middleware.JWTVerify(config.SecretKey))
+		{
+			auth.PUT("/links/:id", lc.Update)
+			auth.DELETE("/links/:id", lc.Delete)
+			auth.POST("/links", lc.Create)
+		}
+	}
 
 	// SET STATIC DIR, START SERVER
 
