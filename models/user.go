@@ -9,8 +9,8 @@ import (
 // User model, defines the user and attributes
 type User struct {
 	gorm.Model
-	Username  string     `sql:"unique"`
-	Password  string     `json:"-",sql:"size:60"`
+	Username  string     `json:"username" form:"username" binding:"required" sql:"unique"`
+	Password  string     `json:"password,-" form:"passowrd" binding:"required" sql:"size:60"`
 	Email     string     `json:"-"`
 	CreatedAt *time.Time `json:",omitempty"`
 	UpdatedAt *time.Time `json:",omitempty"`
