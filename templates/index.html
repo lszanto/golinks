@@ -8,8 +8,13 @@
 <body>
 
     <div id="links-app" >
+        <links :links_list="links" ></links>
+    </div> 
+
+    <template id="links-tmpl" >
+        <h1>Links({{ "{{ links_list.length }}" }})</h1>
         <ul>
-            <li v-for="link in links" >
+            <li v-for="link in links_list" >
                 {{ "{{ link.Title }}" }}
 
                 <strong @click="deleteLink(link)" >X</strong>
@@ -17,7 +22,7 @@
         </ul>
 
         <button @click="authoriseUser()" >Authorise</button>
-    </div>
+    </template>
 
     <script type="text/javascript" src="assets/js/vue.js" ></script>
     <script type="text/javascript" src="assets/js/vue-resource.min.js" ></script>

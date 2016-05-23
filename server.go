@@ -60,7 +60,7 @@ func main() {
 	router.GET("/", sc.Home)
 
 	// api routes
-	api := router.Group("/api")
+	api := router.Group("/api", middleware.CORSMiddleware())
 	{
 		// login routes anybody
 		api.POST("/user/login", uc.Login)
@@ -86,5 +86,5 @@ func main() {
 	router.Static("/assets", "./assets")
 
 	// run server
-	router.Run()
+	router.Run(":3000")
 }
