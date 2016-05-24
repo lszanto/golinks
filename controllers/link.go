@@ -111,9 +111,7 @@ func (lc LinkController) GetAll(c *gin.Context) {
 	lc.db.Preload("User").Find(&links)
 
 	// return all links
-	c.JSON(http.StatusOK, gin.H{
-		"links": links,
-	})
+	c.JSON(http.StatusOK, links)
 }
 
 // Delete a link
