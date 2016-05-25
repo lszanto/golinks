@@ -53,6 +53,9 @@ func main() {
 	// setup router
 	router := gin.Default()
 
+	// let router use CORSMiddleware
+	router.Use(middleware.CORSMiddleware())
+
 	// load templates
 	router.LoadHTMLGlob("templates/*")
 
@@ -60,7 +63,7 @@ func main() {
 	router.GET("/", sc.Home)
 
 	// api routes
-	api := router.Group("/api", middleware.CORSMiddleware())
+	api := router.Group("/api")
 	{
 		// login routes anybody
 		api.POST("/user/login", uc.Login)
