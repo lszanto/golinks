@@ -123,9 +123,7 @@ func (lc LinkController) Delete(c *gin.Context) {
 	var link models.Link
 
 	// find link
-	lc.db.First(&link, id)
-
-	if link.Title == "" {
+	if err := lc.db.First(&link, id).Error; err != nil {
 		c.Status(http.StatusNotFound)
 		return
 	}
