@@ -7,15 +7,11 @@ import (
 	"golang.org/x/net/html"
 )
 
-func getSrc(t html.Token) (src string, err bool) {
-	// assume we don't find set err true
-	err = true
-
+func getSrc(t html.Token) (src string) {
 	// loop through tokens attributes
 	for _, attr := range t.Attr {
 		if attr.Key == "src" {
 			src = attr.Val
-			err = false
 		}
 	}
 
@@ -24,12 +20,12 @@ func getSrc(t html.Token) (src string, err bool) {
 }
 
 // GetImgsFromURL gets the list of images from a given url
-func GetImgsFromURL(url string) (imgs []string) {
+func GetImgsFromURL(url string) (imgs []string, err error) {
 	// grab response from link fetch
 	resp, err := http.Get(url)
 
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	// grab body
@@ -54,7 +50,7 @@ func GetImgsFromURL(url string) (imgs []string) {
 		// check for img
 		if tag := tokens.Token(); tag.Data == "img" {
 			// try get url
-			src, _ := getSrc(tag)
+			src := getSrc(tag)
 
 			// compile regex to match url
 			r, err := regexp.Compile(`(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\.(?:jpg|gif|png|jpeg))(?:\?([^#]*))?(?:#(.*))?`)

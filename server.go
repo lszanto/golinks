@@ -47,6 +47,7 @@ func main() {
 	lc := controllers.NewLinkController(db, config)
 	uc := controllers.NewUserController(db, config)
 	sc := controllers.NewSiteController(db, config)
+	tc := controllers.NewUtilController(db, config)
 
 	// ROUTER
 
@@ -58,10 +59,12 @@ func main() {
 
 	// base routes
 	router.GET("/", sc.Home)
-	router.GET("/images", sc.ImageList)
 
 	// let router use CORSMiddleware
 	router.Use(middleware.CORSMiddleware())
+
+	// only internal
+	router.POST("/util/list_images", tc.ImageList)
 
 	// api routes
 	api := router.Group("/api")
