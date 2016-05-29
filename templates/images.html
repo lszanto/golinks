@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8" >
+    <title>.links images</title>
+</head>
+
+<body>
+
+    <h3>Show all of the images</h3>
+
+    <ul>
+    {{ range $src := .img_list }}
+        <li><img src="{{ $src }}" /></li>
+    {{ end }}
+    </ul>
+
+</body>
+</html>

@@ -53,14 +53,15 @@ func main() {
 	// setup router
 	router := gin.Default()
 
-	// let router use CORSMiddleware
-	router.Use(middleware.CORSMiddleware())
-
 	// load templates
 	router.LoadHTMLGlob("templates/*")
 
 	// base routes
 	router.GET("/", sc.Home)
+	router.GET("/images", sc.ImageList)
+
+	// let router use CORSMiddleware
+	router.Use(middleware.CORSMiddleware())
 
 	// api routes
 	api := router.Group("/api")
@@ -89,5 +90,5 @@ func main() {
 	router.Static("/assets", "./assets")
 
 	// run server
-	router.Run(":3000")
+	router.Run()
 }
