@@ -26,8 +26,8 @@ func (uc UtilController) ImageList(c *gin.Context) {
 	images, err := helpers.GetImgsFromURL(c.PostForm("url"))
 
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"status":  http.StatusNotFound,
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
 			"message": "Error with URL",
 		})
 		return
@@ -35,8 +35,8 @@ func (uc UtilController) ImageList(c *gin.Context) {
 
 	// if no links
 	if len(images) < 1 {
-		c.JSON(http.StatusNotFound, gin.H{
-			"status":  http.StatusNotFound,
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
 			"message": "No images found",
 		})
 		return

@@ -64,7 +64,7 @@ func main() {
 	router.Use(middleware.CORSMiddleware())
 
 	// only internal
-	router.POST("/util/list_images", tc.ImageList)
+	router.POST("/util/list_images", middleware.CORSMiddleware(), tc.ImageList)
 
 	// api routes
 	api := router.Group("/api")
@@ -93,5 +93,5 @@ func main() {
 	router.Static("/assets", "./assets")
 
 	// run server
-	router.Run()
+	router.Run(":3000")
 }
