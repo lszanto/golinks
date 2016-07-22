@@ -32,12 +32,11 @@ func (uc UserController) Login(c *gin.Context) {
 	// attempt login
 	if err != true {
 		// create token
-		token := jwt.New(jwt.SigningMethodHS256)
-
-		// set claims
-		token.Claims["uid"] = user.ID
-		token.Claims["username"] = user.Username
-		token.Claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+			"uid":      user.ID,
+			"username": user.Username,
+			"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		})
 
 		// create token string
 		tokenString, err := token.SignedString([]byte(uc.config.SecretKey))

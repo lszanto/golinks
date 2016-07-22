@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,7 +12,7 @@ import (
 func JWTVerify(key string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// parse jwt
-		token, err := jwt.ParseFromRequest(c.Request, func(token *jwt.Token) (interface{}, error) {
+		token, err := request.ParseFromRequest(c.Request, request.AuthorizationHeaderExtractor, func(token *jwt.Token) (interface{}, error) {
 			return []byte(key), nil
 		})
 
