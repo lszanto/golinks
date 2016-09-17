@@ -93,5 +93,5 @@ func main() {
 	router.Static("/assets", "./assets")
 
 	// run server
-	router.Run(":3000")
+	router.Run(":9000")
 }
