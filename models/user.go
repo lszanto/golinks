@@ -10,7 +10,7 @@ import (
 type User struct {
 	gorm.Model
 	Username  string     `json:"username" form:"username" binding:"required" sql:"unique"`
-	Password  string     `json:"-" form:"passowrd" binding:"required" sql:"size:60"`
+	Password  string     `json:"-" form:"password" binding:"required" sql:"size:60"`
 	Email     string     `json:"-"`
 	CreatedAt *time.Time `json:",omitempty"`
 	UpdatedAt *time.Time `json:",omitempty"`
