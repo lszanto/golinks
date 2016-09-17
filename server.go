@@ -70,7 +70,7 @@ func main() {
 	api := router.Group("/api")
 	{
 		// login routes anybody
-		api.POST("/user/login", uc.Login)
+		api.POST("/login", uc.Login)
 		api.POST("/user", uc.CreateUser)
 		api.GET("/user/:id", uc.Get)
 
