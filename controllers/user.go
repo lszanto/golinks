@@ -62,13 +62,14 @@ func (uc UserController) Login(c *gin.Context) {
 
 // CreateUser creates a new user account
 func (uc UserController) CreateUser(c *gin.Context) {
-	// grab sent attributes
-	username := c.PostForm("username")
-	password := uc.hash(c.PostForm("password"))
-	email := c.PostForm("email")
+	// create luser
+	var luser models.LoginUser
+
+	// bind to json model
+	c.Bind(&luser)
 
 	// insert user
-	uc.db.Create(&models.User{Username: username, Password: password, Email: email})
+	uc.db.Create(&models.User{Username: luser.Username, Password: luser.Password, Email: luser.Email})
 
 	// return success
 	c.JSON(http.StatusCreated, gin.H{
