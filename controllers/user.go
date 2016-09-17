@@ -26,8 +26,14 @@ func NewUserController(db *gorm.DB, config config.Config) *UserController {
 
 // Login checks password and signs in/returns jwt token
 func (uc UserController) Login(c *gin.Context) {
-	// attempt login
-	user, err := uc.login(c.PostForm("username"), c.PostForm("password"))
+	// attempt login, use loginuser as password is not hidden
+	var luser models.LoginUser
+
+	// bind user
+	c.Bind(&luser)
+
+	// attempt to login
+	user, err := uc.login(luser.Username, luser.Password)
 
 	// attempt login
 	if err != true {
