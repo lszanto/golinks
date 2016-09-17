@@ -22,12 +22,12 @@ func NewLinkController(db *gorm.DB, config config.Config) *LinkController {
 
 // Create func to create a new link
 func (lc LinkController) Create(c *gin.Context) {
-	// grab parts
-	title := c.PostForm("title")
-	url := c.PostForm("url")
+	// bind to link
+	var link models.Link
+	c.Bind(&link)
 
 	// ensure we don't have blank fields, if we do return error
-	if title == "" || url == "" {
+	if link.Title == "" || link.URL == "" {
 		c.JSON(http.StatusNotAcceptable, gin.H{
 			"status":  http.StatusNotAcceptable,
 			"message": "Please ensure no fields are blank",
@@ -41,7 +41,7 @@ func (lc LinkController) Create(c *gin.Context) {
 	// get user id with dirty casting
 	uid := int(claims["uid"].(float64))
 
-	lc.db.Create(&models.Link{Title: title, URL: url, UserID: uid})
+	lc.db.Create(&models.Link{Title: link.Title, URL: link.URL, UserID: uid})
 
 	// created
 	c.JSON(http.StatusCreated, gin.H{
@@ -92,8 +92,12 @@ func (lc LinkController) Update(c *gin.Context) {
 		return
 	}
 
+	// bind link to json
+	var llink models.Link
+	c.Bind(&llink)
+
 	// update fields
-	lc.db.Model(&link).Updates(models.Link{Title: c.PostForm("title"), URL: c.PostForm("url")})
+	lc.db.Model(&link).Updates(models.Link{Title: llink.Title, URL: llink.URL})
 
 	// send accepted response
 	c.JSON(http.StatusOK, gin.H{
