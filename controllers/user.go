@@ -54,6 +54,7 @@ func (uc UserController) Login(c *gin.Context) {
 
 		c.JSON(http.StatusOK, gin.H{
 			"token": tokenString,
+			"user":  user,
 		})
 	} else {
 		c.Status(http.StatusUnauthorized)
