@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 
@@ -35,8 +36,8 @@ func (lc LinkController) Create(c *gin.Context) {
 		return
 	}
 
-	// grab claims
-	claims := c.MustGet("claims").(map[string]interface{})
+	// grab claims and map from jwt
+	claims := c.MustGet("claims").(jwt.MapClaims)
 
 	// get user id with dirty casting
 	uid := int(claims["uid"].(float64))
