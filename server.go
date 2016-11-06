@@ -63,12 +63,12 @@ func main() {
 	// let router use CORSMiddleware
 	router.Use(middleware.CORSMiddleware())
 
-	// only internal
-	router.POST("/util/list_images", middleware.CORSMiddleware(), tc.ImageList)
-
 	// api routes
 	api := router.Group("/api")
 	{
+		// only internal
+		router.POST("/util/list_images", middleware.CORSMiddleware(), tc.ImageList)
+
 		// login routes anybody
 		api.POST("/login", uc.Login)
 		api.POST("/user", uc.CreateUser)
